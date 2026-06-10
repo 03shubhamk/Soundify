@@ -43,3 +43,34 @@ graph TD
 - **Security & Config**: CORS, Dotenv
 
 ---
+## 📁 Directory Structure
+
+```text
+Soundify/
+├── backend/                  # REST API Server
+│   ├── models/
+│   │   └── Song.js           # Mongoose Song Schema
+│   ├── routes/
+│   │   ├── search.js         # Deezer API integration
+│   │   └── songs.js          # DB Song operations
+│   ├── .env                  # Environment keys
+│   ├── index.js              # Express app initialization
+│   └── package.json
+│
+└── soundify/                 # Single Page React App
+    ├── public/               # Static assets
+    ├── src/
+    │   ├── components/
+    │   │   ├── Login.jsx     # Login card with mock verification
+    │   │   ├── Sidebar.jsx   # Fixed navigation panel
+    │   │   ├── Main.jsx      # Content layout & search engine
+    │   │   ├── SongCard.jsx  # Interactive music display item
+    │   │   └── Player.jsx    # Sticky bottom audio controller
+    │   ├── App.jsx           # Global state & view router
+    │   ├── index.css         # Global design tokens
+    │   └── main.jsx          # Entry point
+    ├── vite.config.js
+    └── package.json
+```
+
+---
