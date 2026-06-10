@@ -74,3 +74,34 @@ Soundify/
 ```
 
 ---
+## 🚀 Getting Started
+
+### 📋 Prerequisites
+Ensure you have the following installed:
+- [Node.js](https://nodejs.org/) (v16.x or higher recommended)
+- [MongoDB](https://www.mongodb.com/) (Local or MongoDB Atlas instance)
+
+---
+
+### 🔧 1. Backend Setup
+
+1. Navigate to the backend directory:
+   ```bash
+   cd backend
+   ```
+2. Install the required Node dependencies:
+   ```bash
+   npm install
+   ```
+3. Create a `.env` file in the `backend/` root:
+   ```env
+   MONGO_URI=your_mongodb_connection_string
+   RAPID_API_KEY=your_rapid_api_key
+   ```
+4. Start the development server:
+   ```bash
+   node index.js
+   ```
+   *The backend will boot up at `http://localhost:5000`.*
+
+---
