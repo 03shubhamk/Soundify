@@ -18,3 +18,28 @@ graph TD
 ```
 
 ---
+## ✨ Key Features
+
+- **Dynamic Music Search**: Real-time searching across millions of tracks using the external Deezer API proxy, returning track meta, cover art, and 30-second preview audio.
+- **Embedded Audio Player**: A custom-styled fixed media player utilizing HTML5 Audio APIs, supporting automatic playback on song selection and real-time controls.
+- **Mock Authentication Flow**: An interactive login portal providing credentials verification and secure Guest Session bypass to mimic production OAuth behavior.
+- **MongoDB Track Curations**: Database routes ready to manage, add, and fetch locally curated music collections.
+- **Premium UX Design System**: Responsive grid structures, sleek glassmorphism panels, customized input fields, and smooth micro-animations.
+
+---
+
+## 🛠️ Technology Stack
+
+### Frontend
+- **Framework**: React 19 (Functional Components & Hooks)
+- **Bundler**: Vite
+- **Styling**: Vanilla CSS with modern dynamic inline styles
+- **Icons**: Emoji & custom design shapes for high-performance rendering
+
+### Backend
+- **Platform**: Node.js & Express
+- **Database**: MongoDB (via Mongoose)
+- **Integrations**: RapidAPI (Deezer API Client)
+- **Security & Config**: CORS, Dotenv
+
+---
