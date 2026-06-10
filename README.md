@@ -122,3 +122,42 @@ Ensure you have the following installed:
    *The client app will launch at `http://localhost:5173` (or similar active port).*
 
 ---
+## 🔌 API Documentation
+
+### 1. Health Status
+- **Endpoint**: `GET /`
+- **Response**: `200 OK` (Plain text confirmation)
+
+### 2. Search Music (Deezer Proxy)
+- **Endpoint**: `GET /search/:query`
+- **Parameters**: `query` (URL-encoded search term)
+- **Response**: JSON array containing search results:
+  ```json
+  [
+    {
+      "id": 1234567,
+      "title": "Song Title",
+      "artist": "Artist Name",
+      "preview": "https://deezer.com/preview/link.mp3",
+      "cover": "https://deezer.com/cover/medium.jpg"
+    }
+  ]
+  ```
+
+### 3. Retrieve Curated Songs
+- **Endpoint**: `GET /songs`
+- **Response**: JSON array of documents from MongoDB.
+
+### 4. Create Curated Song
+- **Endpoint**: `POST /songs`
+- **Body**:
+  ```json
+  {
+    "title": "New Song",
+    "artist": "New Artist",
+    "file": "path/to/audio/file.mp3"
+  }
+  ```
+- **Response**: JSON of the saved Mongoose document.
+
+---
