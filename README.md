@@ -105,3 +105,20 @@ Ensure you have the following installed:
    *The backend will boot up at `http://localhost:5000`.*
 
 ---
+### 🎨 2. Frontend Setup
+
+1. Navigate to the frontend directory:
+   ```bash
+   cd ../soundify
+   ```
+2. Install the client-side dependencies:
+   ```bash
+   npm install
+   ```
+3. Boot up the Vite local server:
+   ```bash
+   npm run dev
+   ```
+   *The client app will launch at `http://localhost:5173` (or similar active port).*
+
+---
