@@ -183,4 +183,3 @@ The codebase architecture relies on these core components:
 3. **Audio Player Customization**: Replace the default native audio tag controls with customized React components matching the green Spotify-inspired color palette.
 
 
-
