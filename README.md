@@ -181,4 +181,3 @@ The codebase architecture relies on these core components:
 1. **True JWT Authentication**: Replace simulated authentication with JSON Web Tokens and MongoDB user accounts.
 2. **Library Customization**: Allow users to save their favorite tracks returned from searches directly into custom play collections (interacting with `POST /songs`).
 3. **Audio Player Customization**: Replace the default native audio tag controls with customized React components matching the green Spotify-inspired color palette.
-
