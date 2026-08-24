@@ -21,27 +21,13 @@ graph TD
 
 ## ✨ Key Features
 
-- **Dynamic Music Search**: Real-time searching across millions of tracks using the external Deezer API proxy, returning track meta, cover art, and 30-second preview audio.
-- **Embedded Audio Player**: A custom-styled fixed media player utilizing HTML5 Audio APIs, supporting automatic playback on song selection and real-time controls.
-- **Mock Authentication Flow**: An interactive login portal providing credentials verification and secure Guest Session bypass to mimic production OAuth behavior.
-- **MongoDB Track Curations**: Database routes ready to manage, add, and fetch locally curated music collections.
-- **Premium UX Design System**: Responsive grid structures, sleek glassmorphism panels, customized input fields, and smooth micro-animations.
-
----
-
-## 🛠️ Technology Stack
-
-### Frontend
-- **Framework**: React 19 (Functional Components & Hooks)
-- **Bundler**: Vite
-- **Styling**: Vanilla CSS with modern dynamic inline styles
-- **Icons**: Emoji & custom design shapes for high-performance rendering
-
-### Backend
-- **Platform**: Node.js & Express
-- **Database**: MongoDB (via Mongoose)
-- **Integrations**: RapidAPI (Deezer API Client)
-- **Security & Config**: CORS, Dotenv
+- **Custom Audio Player**: Sticky media player bar with interactive timeline scrubber, volume controls, queue popover, shuffle, and repeat.
+- **Dynamic Music Search**: Instant live debounced search across millions of tracks with fallback dataset for uninterrupted playback.
+- **User Playlists & Favorites**: Create and manage custom playlists and save liked songs to MongoDB.
+- **JWT User Authentication**: Real signup/login with password hashing (`bcryptjs`), JWT token validation, and Guest session bypass.
+- **MP3 File Upload Engine**: Host custom user MP3 audio uploads with disk storage via Express `multer` middleware.
+- **Top Charts & Discovery**: Home dashboard featuring trending top charts, genre filters, and recently played songs.
+- **Premium Spotify Aesthetics**: Sleek dark theme, glassmorphic card elements, toast alerts, and responsive navigation.
 
 ---
 
@@ -51,27 +37,35 @@ graph TD
 Soundify/
 ├── backend/                  # REST API Server
 │   ├── models/
-│   │   └── Song.js           # Mongoose Song Schema
+│   │   ├── User.js           # User Auth & Liked Songs Schema
+│   │   ├── Playlist.js       # User Playlist Schema
+│   │   └── Song.js           # Track & File Schema
 │   ├── routes/
-│   │   ├── search.js         # Deezer API integration
-│   │   └── songs.js          # DB Song operations
-│   ├── .env                  # Environment keys
-│   ├── index.js              # Express app initialization
+│   │   ├── auth.js           # JWT Register/Login/Like Endpoints
+│   │   ├── playlists.js      # Playlist CRUD operations
+│   │   ├── search.js         # Search & Trending Deezer integration
+│   │   └── songs.js          # Track retrieval & MP3 file uploads
+│   ├── public/uploads/       # Uploaded MP3 audio files
+│   ├── index.js              # Server initialization
 │   └── package.json
 │
 └── soundify/                 # Single Page React App
-    ├── public/               # Static assets
     ├── src/
+    │   ├── context/
+    │   │   └── AudioContext.jsx # Global playback & session state
     │   ├── components/
-    │   │   ├── Login.jsx     # Login card with mock verification
-    │   │   ├── Sidebar.jsx   # Fixed navigation panel
-    │   │   ├── Main.jsx      # Content layout & search engine
-    │   │   ├── SongCard.jsx  # Interactive music display item
-    │   │   └── Player.jsx    # Sticky bottom audio controller
-    │   ├── App.jsx           # Global state & view router
-    │   ├── index.css         # Global design tokens
+    │   │   ├── Home.jsx      # Top Charts & Discovery Dashboard
+    │   │   ├── Library.jsx   # Playlists & Liked Songs manager
+    │   │   ├── Login.jsx     # JWT Authentication & Guest view
+    │   │   ├── Main.jsx      # View Router & Debounced search engine
+    │   │   ├── Player.jsx    # Custom Audio Player bar & Queue
+    │   │   ├── Sidebar.jsx   # Fixed navigation panel & Profile badge
+    │   │   ├── SongCard.jsx  # Glassmorphic track card with context menu
+    │   │   ├── ToastNotification.jsx # Feedback alerts
+    │   │   └── UploadModal.jsx # Custom MP3 file upload modal
+    │   ├── App.jsx           # Application wrapper
+    │   ├── index.css         # Styling system & dark mode tokens
     │   └── main.jsx          # Entry point
-    ├── vite.config.js
     └── package.json
 ```
 
