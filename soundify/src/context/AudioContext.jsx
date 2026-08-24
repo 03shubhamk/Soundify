@@ -6,6 +6,13 @@ export const AudioProvider = ({ children }) => {
   // Audio Ref
   const audioRef = useRef(new Audio());
 
+  // Theme & Navigation State
+  const [theme, setTheme] = useState(() => localStorage.getItem("soundify_theme") || "dark");
+  const [topCategory, setTopCategory] = useState("MUSIC"); // MUSIC | PODCAST | LIVE | GENRES
+  const [activeTab, setActiveTab] = useState("home"); // home | playlist | album | artist | radio | search | library | liked
+  const [toastMessage, setToastMessage] = useState(null);
+  const [isUploadOpen, setIsUploadOpen] = useState(false);
+
   // Player State
   const [currentSong, setCurrentSong] = useState(null);
   const [isPlaying, setIsPlaying] = useState(false);
@@ -21,11 +28,6 @@ export const AudioProvider = ({ children }) => {
   const [isShuffle, setIsShuffle] = useState(false);
   const [isRepeat, setIsRepeat] = useState(false);
 
-  // App Navigation & UI State
-  const [activeTab, setActiveTab] = useState("home"); // home | search | library | liked
-  const [toastMessage, setToastMessage] = useState(null);
-  const [isUploadOpen, setIsUploadOpen] = useState(false);
-
   // User & Collections State
   const [user, setUser] = useState(() => {
     const saved = localStorage.getItem("soundify_user");
@@ -40,6 +42,13 @@ export const AudioProvider = ({ children }) => {
     const saved = localStorage.getItem("soundify_playlists");
     return saved ? JSON.parse(saved) : [];
   });
+
+  // Toggle Theme between dark and light
+  const toggleTheme = () => {
+    const newTheme = theme === "dark" ? "light" : "dark";
+    setTheme(newTheme);
+    localStorage.setItem("soundify_theme", newTheme);
+  };
 
   // Display Toast Alert
   const showToast = (msg) => {
@@ -78,7 +87,7 @@ export const AudioProvider = ({ children }) => {
     };
   }, [queueIndex, playQueue, isShuffle, isRepeat]);
 
-  // Save liked songs & playlists to localStorage as fallback
+  // Sync localStorage
   useEffect(() => {
     localStorage.setItem("soundify_liked", JSON.stringify(likedSongs));
   }, [likedSongs]);
@@ -87,7 +96,7 @@ export const AudioProvider = ({ children }) => {
     localStorage.setItem("soundify_playlists", JSON.stringify(playlists));
   }, [playlists]);
 
-  // Play a specific song and optionally update queue
+  // Play a specific song and update queue
   const playSong = (song, queue = null) => {
     if (!song) return;
 
@@ -96,7 +105,6 @@ export const AudioProvider = ({ children }) => {
       const idx = queue.findIndex(s => String(s.id || s._id) === String(song.id || song._id));
       setQueueIndex(idx !== -1 ? idx : 0);
     } else if (currentSong && String(currentSong.id || currentSong._id) === String(song.id || song._id)) {
-      // Toggle play pause if clicking current song
       togglePlay();
       return;
     } else {
@@ -176,7 +184,6 @@ export const AudioProvider = ({ children }) => {
     setIsMuted(!isMuted);
   };
 
-  // Toggle Like Song
   const toggleLikeSong = (song) => {
     const songId = String(song.id || song._id);
     const exists = likedSongs.some(s => String(s.id || s._id) === songId);
@@ -191,7 +198,6 @@ export const AudioProvider = ({ children }) => {
     }
     setLikedSongs(updated);
 
-    // Sync backend if logged in
     if (token) {
       fetch("http://localhost:5000/api/auth/toggle-like", {
         method: "POST",
@@ -248,7 +254,6 @@ export const AudioProvider = ({ children }) => {
     showToast("Playlist deleted");
   };
 
-  // Auth Operations
   const handleLogin = (userData, userToken) => {
     setUser(userData);
     setToken(userToken);
@@ -271,6 +276,9 @@ export const AudioProvider = ({ children }) => {
   return (
     <AudioContext.Provider
       value={{
+        theme,
+        topCategory,
+        activeTab,
         currentSong,
         isPlaying,
         currentTime,
@@ -281,13 +289,14 @@ export const AudioProvider = ({ children }) => {
         recentlyPlayed,
         isShuffle,
         isRepeat,
-        activeTab,
         toastMessage,
         isUploadOpen,
         user,
         token,
         likedSongs,
         playlists,
+        toggleTheme,
+        setTopCategory,
         setActiveTab,
         setIsUploadOpen,
         playSong,

@@ -1,234 +1,379 @@
 import { useState, useEffect } from "react";
-import SongCard from "./SongCard";
 import { useAudio } from "../context/AudioContext";
+import SongCard from "./SongCard";
 
 function Home() {
-  const { playSong, recentlyPlayed, setActiveTab } = useAudio();
+  const { playSong, currentSong, isPlaying, likedSongs, toggleLikeSong } = useAudio();
   const [trendingSongs, setTrendingSongs] = useState([]);
-  const [customSongs, setCustomSongs] = useState([]);
-  const [selectedGenre, setSelectedGenre] = useState("All");
-  const [loading, setLoading] = useState(true);
-
-  const genres = ["All", "Pop", "Electronic", "Hip-Hop", "Rock", "Chill"];
+  const [albums, setAlbums] = useState([]);
 
   useEffect(() => {
-    // Fetch Trending Hits
     fetch("http://localhost:5000/search/trending")
       .then((res) => res.json())
       .then((data) => {
         setTrendingSongs(data);
-        setLoading(false);
-      })
-      .catch((err) => {
-        console.error("Trending fetch error:", err);
-        setLoading(false);
-      });
 
-    // Fetch Custom Uploads
-    fetch("http://localhost:5000/songs")
-      .then((res) => res.json())
-      .then((data) => setCustomSongs(data))
-      .catch((err) => console.error("Custom songs error:", err));
+        // Group into mock albums
+        setAlbums([
+          { title: "The Light", artist: "Jose", cover: "https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=300&auto=format&fit=crop&q=80" },
+          { title: "Order Me", artist: "Mason Nail", cover: "https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=300&auto=format&fit=crop&q=80" },
+          { title: "Made For Me", artist: "Tyal Wass", cover: "https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?w=300&auto=format&fit=crop&q=80" },
+          { title: "Mood", artist: "What?", cover: "https://images.unsplash.com/photo-1508700115892-45ecd05ae2ad?w=300&auto=format&fit=crop&q=80" }
+        ]);
+      })
+      .catch((err) => console.error("Home trending error:", err));
   }, []);
 
-  const filteredSongs =
-    selectedGenre === "All"
-      ? trendingSongs
-      : trendingSongs.filter(
-          (s) => s.genre?.toLowerCase() === selectedGenre.toLowerCase()
-        );
+  const heroSong = trendingSongs[0] || {
+    title: "In My Minds",
+    artist: "Jay Karl",
+    cover: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=500&auto=format&fit=crop&q=80",
+    preview: "https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf07a.mp3?filename=lofi-study-112191.mp3"
+  };
+
+  const topMusicList = trendingSongs.slice(0, 5);
+  const popularList = trendingSongs.slice(1, 5);
 
   return (
-    <div style={{ display: "flex", flexDirection: "column", gap: "32px" }}>
-      {/* HERO HERO BANNER */}
+    <div style={{ display: "flex", flexDirection: "column", gap: "28px" }}>
+      {/* 1. HERO BANNER ("Trending Now Hit") */}
       <div
         style={{
-          background: "linear-gradient(135deg, #1db954 0%, #0d5c28 50%, #121212 100%)",
-          borderRadius: "16px",
-          padding: "40px",
+          position: "relative",
+          borderRadius: "20px",
+          padding: "36px 40px",
+          background: "var(--hero-gradient)",
+          color: "var(--text-main)",
           display: "flex",
           alignItems: "center",
           justifyContent: "space-between",
-          boxShadow: "0 12px 32px rgba(29, 185, 84, 0.25)"
+          overflow: "hidden",
+          boxShadow: "0 12px 30px rgba(0, 210, 255, 0.15)",
+          minHeight: "220px",
+          transition: "background 0.3s"
         }}
       >
-        <div style={{ maxWidth: "500px" }}>
+        {/* Decorative background circle graphics */}
+        <div
+          style={{
+            position: "absolute",
+            top: "-50px",
+            left: "200px",
+            width: "350px",
+            height: "350px",
+            borderRadius: "50%",
+            border: "1px solid rgba(255, 255, 255, 0.2)",
+            pointerEvents: "none"
+          }}
+        />
+
+        <div style={{ maxWidth: "420px", zIndex: 2 }}>
           <span
             style={{
-              textTransform: "uppercase",
-              fontSize: "12px",
+              fontSize: "13px",
               fontWeight: "700",
-              letterSpacing: "1.5px",
-              color: "#a3f3be"
+              color: "var(--text-hero-sub)",
+              display: "block",
+              marginBottom: "8px"
             }}
           >
-            VERIFIED PLAYLIST
+            Trending Now Hit
           </span>
+
           <h1
             style={{
-              fontSize: "42px",
-              fontWeight: "800",
-              margin: "8px 0 12px 0",
+              fontSize: "44px",
+              fontWeight: "900",
+              margin: "0 0 4px 0",
               lineHeight: 1.1,
-              color: "white"
+              tracking: "-1px"
             }}
           >
-            Today's Top Hits
+            {heroSong.title}
           </h1>
-          <p style={{ color: "#e0e0e0", fontSize: "15px", marginBottom: "24px" }}>
-            The hottest tracks right now. Powered by Deezer & Soundify Music Community.
-          </p>
 
-          <div style={{ display: "flex", gap: "14px" }}>
+          <div
+            style={{
+              fontSize: "16px",
+              fontWeight: "600",
+              marginBottom: "20px",
+              display: "flex",
+              alignItems: "center",
+              gap: "12px",
+              color: "var(--text-hero-sub)"
+            }}
+          >
+            <span>{heroSong.artist}</span>
+            <span style={{ fontSize: "12px", opacity: 0.8 }}>67millions Plays</span>
+          </div>
+
+          <div style={{ display: "flex", alignItems: "center", gap: "14px" }}>
             <button
-              onClick={() => {
-                if (trendingSongs.length > 0) playSong(trendingSongs[0], trendingSongs);
-              }}
+              onClick={() => playSong(heroSong, trendingSongs)}
               style={{
-                backgroundColor: "#1DB954",
-                color: "black",
+                backgroundColor: "var(--btn-hero)",
+                color: "var(--btn-hero-text)",
                 border: "none",
-                padding: "14px 28px",
+                padding: "12px 28px",
                 borderRadius: "30px",
                 fontWeight: "700",
-                fontSize: "15px",
+                fontSize: "14px",
                 cursor: "pointer",
+                boxShadow: "0 6px 16px rgba(0,0,0,0.2)"
+              }}
+            >
+              Listen Now
+            </button>
+
+            <button
+              onClick={() => toggleLikeSong(heroSong)}
+              style={{
+                width: "42px",
+                height: "42px",
+                borderRadius: "50%",
+                backgroundColor: "rgba(255,255,255,0.2)",
+                border: "none",
+                color: "white",
+                fontSize: "18px",
                 display: "flex",
                 alignItems: "center",
-                gap: "8px",
-                boxShadow: "0 6px 16px rgba(0,0,0,0.3)"
-              }}
-            >
-              <span>▶</span> Play All
-            </button>
-
-            <button
-              onClick={() => setActiveTab("search")}
-              style={{
-                backgroundColor: "rgba(255,255,255,0.15)",
-                color: "white",
-                border: "1px solid rgba(255,255,255,0.3)",
-                padding: "14px 24px",
-                borderRadius: "30px",
-                fontWeight: "600",
-                fontSize: "15px",
-                cursor: "pointer"
-              }}
-            >
-              🔍 Explore
-            </button>
-          </div>
-        </div>
-
-        <div style={{ display: "none" }}>{/* Media Graphic placeholder */}</div>
-      </div>
-
-      {/* GENRE FILTER PILLS */}
-      <div style={{ display: "flex", gap: "10px", flexWrap: "wrap" }}>
-        {genres.map((genre) => {
-          const isSelected = selectedGenre === genre;
-          return (
-            <button
-              key={genre}
-              onClick={() => setSelectedGenre(genre)}
-              style={{
-                padding: "8px 18px",
-                borderRadius: "20px",
-                border: "none",
-                backgroundColor: isSelected ? "#1DB954" : "#242424",
-                color: isSelected ? "#000" : "#fff",
-                fontWeight: isSelected ? "700" : "500",
-                fontSize: "13px",
+                justifyContent: "center",
                 cursor: "pointer",
-                transition: "all 0.2s"
+                backdropFilter: "blur(4px)"
               }}
             >
-              {genre}
+              ❤️
             </button>
-          );
-        })}
-      </div>
-
-      {/* RECENTLY PLAYED SECTION */}
-      {recentlyPlayed.length > 0 && (
-        <div>
-          <h2 style={{ fontSize: "22px", fontWeight: "700", marginBottom: "16px" }}>
-            Recently Played
-          </h2>
-          <div
-            style={{
-              display: "grid",
-              gridTemplateColumns: "repeat(auto-fill, minmax(180px, 1fr))",
-              gap: "20px"
-            }}
-          >
-            {recentlyPlayed.map((song, idx) => (
-              <SongCard key={idx} song={song} queue={recentlyPlayed} />
-            ))}
           </div>
         </div>
-      )}
 
-      {/* TRENDING CHARTS GRID */}
+        {/* Hero Artist Graphic Photo */}
+        <div style={{ position: "relative", zIndex: 2, height: "220px", display: "flex", alignItems: "flex-end" }}>
+          <img
+            src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=500&auto=format&fit=crop&q=80"
+            alt="Hero Artist"
+            style={{
+              height: "240px",
+              objectFit: "cover",
+              filter: "drop-shadow(0 10px 20px rgba(0,0,0,0.3))"
+            }}
+          />
+        </div>
+      </div>
+
+      {/* 2. "TOP MUSIC" SECTION */}
       <div>
-        <h2 style={{ fontSize: "22px", fontWeight: "700", marginBottom: "16px" }}>
-          Popular & Trending
+        <h2 style={{ fontSize: "18px", fontWeight: "800", marginBottom: "14px", color: "var(--text-main)" }}>
+          Top Music
         </h2>
 
-        {loading ? (
-          <div
-            style={{
-              display: "grid",
-              gridTemplateColumns: "repeat(auto-fill, minmax(180px, 1fr))",
-              gap: "20px"
-            }}
-          >
-            {[1, 2, 3, 4, 5, 6].map((n) => (
-              <div
-                key={n}
-                style={{
-                  height: "220px",
-                  backgroundColor: "#181818",
-                  borderRadius: "10px",
-                  animation: "pulse 1.5s infinite"
-                }}
-              />
-            ))}
-          </div>
-        ) : (
-          <div
-            style={{
-              display: "grid",
-              gridTemplateColumns: "repeat(auto-fill, minmax(180px, 1fr))",
-              gap: "20px"
-            }}
-          >
-            {filteredSongs.map((song) => (
-              <SongCard key={song.id} song={song} queue={filteredSongs} />
-            ))}
-          </div>
-        )}
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fill, minmax(170px, 1fr))",
+            gap: "18px"
+          }}
+        >
+          {topMusicList.map((song) => (
+            <SongCard key={song.id || song._id} song={song} queue={topMusicList} />
+          ))}
+        </div>
       </div>
 
-      {/* CUSTOM UPLOADS SECTION */}
-      {customSongs.length > 0 && (
+      {/* 3. TWO-COLUMN ROW: "POPULAR" & "RECOMMENDED ALBUM" */}
+      <div
+        style={{
+          display: "grid",
+          gridTemplateColumns: "1.1fr 0.9fr",
+          gap: "28px",
+          alignItems: "start"
+        }}
+      >
+        {/* LEFT COLUMN: POPULAR TRACKS */}
         <div>
-          <h2 style={{ fontSize: "22px", fontWeight: "700", marginBottom: "16px" }}>
-            Uploaded by Community
+          <h2 style={{ fontSize: "18px", fontWeight: "800", marginBottom: "14px", color: "var(--text-main)" }}>
+            Popular
           </h2>
+
+          <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
+            {popularList.map((song) => {
+              const isCurrent = currentSong && String(currentSong.id || currentSong._id) === String(song.id || song._id);
+              const isLiked = likedSongs.some((s) => String(s.id || s._id) === String(song.id || song._id));
+
+              return (
+                <div
+                  key={song.id || song._id}
+                  onClick={() => playSong(song, popularList)}
+                  style={{
+                    backgroundColor: isCurrent ? "var(--bg-active-pill)" : "var(--bg-card)",
+                    padding: "8px 16px",
+                    borderRadius: "30px",
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "14px",
+                    cursor: "pointer",
+                    boxShadow: "0 2px 8px rgba(0,0,0,0.05)",
+                    transition: "all 0.2s"
+                  }}
+                  className="popular-item"
+                >
+                  {/* Play/Pause round icon */}
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      playSong(song, popularList);
+                    }}
+                    style={{
+                      width: "32px",
+                      height: "32px",
+                      borderRadius: "50%",
+                      backgroundColor: isCurrent ? "var(--accent-cyan)" : "rgba(255,255,255,0.15)",
+                      color: isCurrent ? "#000" : "var(--text-main)",
+                      border: "none",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      fontSize: "12px",
+                      cursor: "pointer"
+                    }}
+                  >
+                    {isCurrent && isPlaying ? "⏸" : "▶"}
+                  </button>
+
+                  <img
+                    src={song.cover}
+                    alt={song.title}
+                    style={{ width: "38px", height: "38px", borderRadius: "50%", objectFit: "cover" }}
+                  />
+
+                  <div style={{ flex: 1, overflow: "hidden" }}>
+                    <div
+                      style={{
+                        fontSize: "13px",
+                        fontWeight: "700",
+                        color: isCurrent ? "var(--accent-cyan)" : "var(--text-main)",
+                        whiteSpace: "nowrap",
+                        overflow: "hidden",
+                        textOverflow: "ellipsis"
+                      }}
+                    >
+                      {song.title}
+                    </div>
+                    <div
+                      style={{
+                        fontSize: "11px",
+                        color: "var(--text-muted)",
+                        whiteSpace: "nowrap",
+                        overflow: "hidden",
+                        textOverflow: "ellipsis"
+                      }}
+                    >
+                      {song.artist}
+                    </div>
+                  </div>
+
+                  <span style={{ fontSize: "12px", color: "var(--text-muted)", fontWeight: "600" }}>
+                    3:25
+                  </span>
+
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      toggleLikeSong(song);
+                    }}
+                    style={{
+                      background: "none",
+                      border: "none",
+                      color: isLiked ? "var(--accent-cyan)" : "var(--text-muted)",
+                      cursor: "pointer",
+                      fontSize: "14px"
+                    }}
+                  >
+                    {isLiked ? "❤️" : "🤍"}
+                  </button>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* RIGHT COLUMN: RECOMMENDED ALBUM */}
+        <div>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              marginBottom: "14px"
+            }}
+          >
+            <h2 style={{ fontSize: "18px", fontWeight: "800", margin: 0, color: "var(--text-main)" }}>
+              Recommended Album
+            </h2>
+
+            <div style={{ display: "flex", gap: "6px" }}>
+              <button
+                style={{
+                  background: "none",
+                  border: "none",
+                  color: "var(--text-muted)",
+                  fontSize: "16px",
+                  cursor: "pointer"
+                }}
+              >
+                ←
+              </button>
+              <button
+                style={{
+                  background: "none",
+                  border: "none",
+                  color: "var(--text-muted)",
+                  fontSize: "16px",
+                  cursor: "pointer"
+                }}
+              >
+                →
+              </button>
+            </div>
+          </div>
+
           <div
             style={{
               display: "grid",
-              gridTemplateColumns: "repeat(auto-fill, minmax(180px, 1fr))",
-              gap: "20px"
+              gridTemplateColumns: "repeat(4, 1fr)",
+              gap: "12px"
             }}
           >
-            {customSongs.map((song) => (
-              <SongCard key={song._id || song.id} song={song} queue={customSongs} />
+            {albums.map((album, idx) => (
+              <div key={idx} style={{ cursor: "pointer", textAlign: "center" }}>
+                <img
+                  src={album.cover}
+                  alt={album.title}
+                  style={{
+                    width: "100%",
+                    aspectRatio: "1 / 1",
+                    borderRadius: "10px",
+                    objectFit: "cover",
+                    marginBottom: "6px"
+                  }}
+                />
+                <div
+                  style={{
+                    fontSize: "12px",
+                    fontWeight: "700",
+                    color: "var(--text-main)",
+                    whiteSpace: "nowrap",
+                    overflow: "hidden",
+                    textOverflow: "ellipsis"
+                  }}
+                >
+                  {album.title}
+                </div>
+              </div>
             ))}
           </div>
         </div>
-      )}
+      </div>
     </div>
   );
 }

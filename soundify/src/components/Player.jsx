@@ -47,18 +47,18 @@ function Player() {
         <div
           style={{
             position: "fixed",
-            bottom: "90px",
+            bottom: "85px",
             right: "24px",
             width: "320px",
             maxHeight: "400px",
-            backgroundColor: "#181818",
-            border: "1px solid #282828",
+            backgroundColor: "var(--bg-card)",
+            border: "1px solid var(--border-color)",
             borderRadius: "12px",
             padding: "16px",
-            boxShadow: "0 16px 32px rgba(0,0,0,0.8)",
+            boxShadow: "0 16px 32px rgba(0,0,0,0.4)",
             zIndex: 1000,
             overflowY: "auto",
-            color: "white"
+            color: "var(--text-main)"
           }}
         >
           <div
@@ -67,21 +67,21 @@ function Player() {
               justifyContent: "space-between",
               alignItems: "center",
               marginBottom: "12px",
-              borderBottom: "1px solid #282828",
+              borderBottom: "1px solid var(--border-color)",
               paddingBottom: "8px"
             }}
           >
-            <h3 style={{ margin: 0, fontSize: "15px" }}>Up Next ({playQueue.length})</h3>
+            <h3 style={{ margin: 0, fontSize: "15px", fontWeight: "700" }}>Up Next ({playQueue.length})</h3>
             <button
               onClick={() => setShowQueue(false)}
-              style={{ background: "none", border: "none", color: "#b3b3b3", cursor: "pointer" }}
+              style={{ background: "none", border: "none", color: "var(--text-muted)", cursor: "pointer" }}
             >
               ✕
             </button>
           </div>
 
           {playQueue.length === 0 ? (
-            <p style={{ color: "#b3b3b3", fontSize: "13px" }}>Queue is empty</p>
+            <p style={{ color: "var(--text-muted)", fontSize: "13px" }}>Queue is empty</p>
           ) : (
             playQueue.map((song, index) => {
               const isCurrent =
@@ -97,7 +97,7 @@ function Player() {
                     padding: "8px",
                     borderRadius: "6px",
                     cursor: "pointer",
-                    backgroundColor: isCurrent ? "#282828" : "transparent",
+                    backgroundColor: isCurrent ? "var(--bg-active-pill)" : "transparent",
                     transition: "background 0.2s"
                   }}
                 >
@@ -110,15 +110,16 @@ function Player() {
                     <div
                       style={{
                         fontSize: "13px",
+                        fontWeight: "700",
                         whiteSpace: "nowrap",
                         textOverflow: "ellipsis",
                         overflow: "hidden",
-                        color: isCurrent ? "#1DB954" : "white"
+                        color: isCurrent ? "var(--accent-cyan)" : "var(--text-main)"
                       }}
                     >
                       {song.title}
                     </div>
-                    <div style={{ fontSize: "11px", color: "#b3b3b3" }}>{song.artist}</div>
+                    <div style={{ fontSize: "11px", color: "var(--text-muted)" }}>{song.artist}</div>
                   </div>
                 </div>
               );
@@ -127,37 +128,70 @@ function Player() {
         </div>
       )}
 
-      {/* MAIN BOTTOM PLAYER BAR */}
-      <div
+      {/* MAIN STICKY BOTTOM PLAYER BAR */}
+      <footer
         style={{
           position: "fixed",
           bottom: 0,
-          left: "250px",
+          left: "240px",
           right: 0,
-          height: "85px",
-          backgroundColor: "#181818",
-          borderTop: "1px solid #282828",
-          padding: "0 24px",
+          height: "80px",
+          backgroundColor: "var(--bg-player)",
+          borderTop: "1px solid var(--border-color)",
+          padding: "0 28px",
           display: "flex",
           alignItems: "center",
           justifyContent: "space-between",
           zIndex: 900,
-          boxShadow: "0 -4px 20px rgba(0,0,0,0.5)"
+          boxShadow: "0 -4px 20px rgba(0,0,0,0.2)",
+          transition: "background-color 0.3s, border-color 0.3s"
         }}
       >
-        {/* LEFT: Track Info */}
+        {/* LEFT: Sound Wave Indicator & Track Info */}
         <div style={{ display: "flex", alignItems: "center", gap: "14px", width: "240px" }}>
+          {/* Animated sound wave bars icon */}
+          <div style={{ display: "flex", alignItems: "flex-end", gap: "2px", height: "16px" }}>
+            <span
+              style={{
+                width: "3px",
+                height: isPlaying ? "14px" : "6px",
+                backgroundColor: "var(--accent-cyan)",
+                borderRadius: "2px",
+                transition: "height 0.3s"
+              }}
+            />
+            <span
+              style={{
+                width: "3px",
+                height: isPlaying ? "10px" : "10px",
+                backgroundColor: "var(--accent-cyan)",
+                borderRadius: "2px",
+                transition: "height 0.3s"
+              }}
+            />
+            <span
+              style={{
+                width: "3px",
+                height: isPlaying ? "16px" : "8px",
+                backgroundColor: "var(--accent-cyan)",
+                borderRadius: "2px",
+                transition: "height 0.3s"
+              }}
+            />
+          </div>
+
           <img
             src={currentSong.cover}
             alt={currentSong.title}
-            style={{ width: "56px", height: "56px", borderRadius: "6px", objectFit: "cover" }}
+            style={{ width: "46px", height: "46px", borderRadius: "8px", objectFit: "cover" }}
           />
+
           <div style={{ overflow: "hidden", flex: 1 }}>
             <div
               style={{
-                fontSize: "14px",
-                fontWeight: "600",
-                color: "white",
+                fontSize: "13px",
+                fontWeight: "700",
+                color: "var(--text-main)",
                 whiteSpace: "nowrap",
                 overflow: "hidden",
                 textOverflow: "ellipsis"
@@ -167,8 +201,8 @@ function Player() {
             </div>
             <div
               style={{
-                fontSize: "12px",
-                color: "#b3b3b3",
+                fontSize: "11px",
+                color: "var(--text-muted)",
                 whiteSpace: "nowrap",
                 overflow: "hidden",
                 textOverflow: "ellipsis"
@@ -177,140 +211,94 @@ function Player() {
               {currentSong.artist}
             </div>
           </div>
-          <button
-            onClick={() => toggleLikeSong(currentSong)}
-            title={isLiked ? "Unlike" : "Like"}
-            style={{
-              background: "none",
-              border: "none",
-              cursor: "pointer",
-              fontSize: "18px",
-              color: isLiked ? "#1DB954" : "#b3b3b3",
-              padding: "4px"
-            }}
-          >
-            {isLiked ? "❤️" : "🤍"}
-          </button>
         </div>
 
         {/* CENTER: Playback Controls & Timeline Scrubber */}
         <div
           style={{
             display: "flex",
-            flexDirection: "column",
             alignItems: "center",
-            gap: "6px",
-            maxWidth: "500px",
+            gap: "16px",
+            maxWidth: "540px",
             flex: 1
           }}
         >
           {/* Action Buttons */}
-          <div style={{ display: "flex", alignItems: "center", gap: "18px" }}>
-            <button
-              onClick={() => setIsShuffle(!isShuffle)}
-              title="Shuffle"
-              style={{
-                background: "none",
-                border: "none",
-                fontSize: "15px",
-                cursor: "pointer",
-                color: isShuffle ? "#1DB954" : "#b3b3b3"
-              }}
-            >
-              🔀
-            </button>
+          <button
+            onClick={prevSong}
+            title="Previous Track"
+            style={{
+              background: "none",
+              border: "none",
+              fontSize: "16px",
+              cursor: "pointer",
+              color: "var(--text-muted)"
+            }}
+          >
+            ⏮
+          </button>
 
-            <button
-              onClick={prevSong}
-              title="Previous Track"
-              style={{
-                background: "none",
-                border: "none",
-                fontSize: "18px",
-                cursor: "pointer",
-                color: "#b3b3b3"
-              }}
-            >
-              ⏮️
-            </button>
+          <button
+            onClick={togglePlay}
+            title={isPlaying ? "Pause" : "Play"}
+            style={{
+              width: "42px",
+              height: "42px",
+              borderRadius: "50%",
+              backgroundColor: "var(--accent-cyan)",
+              color: "#000",
+              border: "none",
+              fontSize: "16px",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              cursor: "pointer",
+              boxShadow: "0 4px 12px rgba(0, 210, 255, 0.4)",
+              transition: "transform 0.1s"
+            }}
+          >
+            {isPlaying ? "⏸" : "▶"}
+          </button>
 
-            <button
-              onClick={togglePlay}
-              title={isPlaying ? "Pause" : "Play"}
-              style={{
-                width: "38px",
-                height: "38px",
-                borderRadius: "50%",
-                backgroundColor: "white",
-                color: "black",
-                border: "none",
-                fontSize: "16px",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                cursor: "pointer",
-                transition: "transform 0.1s"
-              }}
-            >
-              {isPlaying ? "⏸" : "▶"}
-            </button>
-
-            <button
-              onClick={nextSong}
-              title="Next Track"
-              style={{
-                background: "none",
-                border: "none",
-                fontSize: "18px",
-                cursor: "pointer",
-                color: "#b3b3b3"
-              }}
-            >
-              ⏭️
-            </button>
-
-            <button
-              onClick={() => setIsRepeat(!isRepeat)}
-              title="Repeat"
-              style={{
-                background: "none",
-                border: "none",
-                fontSize: "15px",
-                cursor: "pointer",
-                color: isRepeat ? "#1DB954" : "#b3b3b3"
-              }}
-            >
-              🔁
-            </button>
-          </div>
+          <button
+            onClick={nextSong}
+            title="Next Track"
+            style={{
+              background: "none",
+              border: "none",
+              fontSize: "16px",
+              cursor: "pointer",
+              color: "var(--text-muted)"
+            }}
+          >
+            ⏭
+          </button>
 
           {/* Timeline Bar */}
-          <div style={{ display: "flex", alignItems: "center", gap: "10px", width: "100%" }}>
-            <span style={{ fontSize: "11px", color: "#b3b3b3", width: "35px", textAlign: "right" }}>
-              {formatTime(currentTime)}
-            </span>
+          <span style={{ fontSize: "11px", color: "var(--text-muted)", width: "35px", textAlign: "right" }}>
+            {formatTime(currentTime)}
+          </span>
 
-            <input
-              type="range"
-              min={0}
-              max={duration || 30}
-              value={currentTime}
-              onChange={(e) => seekTo(Number(e.target.value))}
-              style={{
-                flex: 1,
-                accentColor: "#1DB954",
-                height: "4px",
-                cursor: "pointer"
-              }}
-            />
+          <input
+            type="range"
+            min={0}
+            max={duration || 30}
+            value={currentTime}
+            onChange={(e) => seekTo(Number(e.target.value))}
+            style={{
+              flex: 1,
+              accentColor: "var(--accent-cyan)",
+              height: "4px",
+              cursor: "pointer"
+            }}
+          />
 
-            <span style={{ fontSize: "11px", color: "#b3b3b3", width: "35px" }}>
-              {formatTime(duration || 30)}
-            </span>
-          </div>
+          <span style={{ fontSize: "11px", color: "var(--text-muted)", width: "35px" }}>
+            {formatTime(duration || 30)}
+          </span>
         </div>
 
-        {/* RIGHT: Volume Slider & Queue Toggle */}
+        {/* RIGHT: Volume & Extras Controls */}
         <div
           style={{
             display: "flex",
@@ -321,17 +309,17 @@ function Player() {
           }}
         >
           <button
-            onClick={() => setShowQueue(!showQueue)}
-            title="Up Next Queue"
+            onClick={() => setIsShuffle(!isShuffle)}
+            title="Shuffle"
             style={{
               background: "none",
               border: "none",
-              color: showQueue ? "#1DB954" : "#b3b3b3",
-              fontSize: "16px",
-              cursor: "pointer"
+              fontSize: "14px",
+              cursor: "pointer",
+              color: isShuffle ? "var(--accent-cyan)" : "var(--text-muted)"
             }}
           >
-            📜
+            🔀
           </button>
 
           <button
@@ -340,7 +328,7 @@ function Player() {
             style={{
               background: "none",
               border: "none",
-              color: "#b3b3b3",
+              color: "var(--text-muted)",
               fontSize: "16px",
               cursor: "pointer"
             }}
@@ -356,14 +344,28 @@ function Player() {
             value={isMuted ? 0 : volume}
             onChange={(e) => changeVolume(Number(e.target.value))}
             style={{
-              width: "80px",
-              accentColor: "#1DB954",
+              width: "70px",
+              accentColor: "var(--accent-cyan)",
               height: "4px",
               cursor: "pointer"
             }}
           />
+
+          <button
+            onClick={() => setShowQueue(!showQueue)}
+            title="Up Next Queue"
+            style={{
+              background: "none",
+              border: "none",
+              color: showQueue ? "var(--accent-cyan)" : "var(--text-muted)",
+              fontSize: "16px",
+              cursor: "pointer"
+            }}
+          >
+            📜
+          </button>
         </div>
-      </div>
+      </footer>
     </>
   );
 }
