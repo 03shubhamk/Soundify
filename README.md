@@ -148,7 +148,6 @@ Ensure you have the following installed:
 - **Fetch Songs**: `GET /songs`
 - **Upload Custom MP3**: `POST /songs/upload` (`multipart/form-data`: `audio`, `cover`, `title`, `artist`)
 
-
 ---
 
 ## 🔗 Code Reference & Architecture Links
@@ -163,12 +162,3 @@ The codebase architecture relies on these core components:
 - **Global Context**: [soundify/src/context/AudioContext.jsx](file:///e:/My Projects/Soundify/soundify/src/context/AudioContext.jsx) — Core player queue & auth state management.
 - **Audio Interface**: [soundify/src/components/Player.jsx](file:///e:/My Projects/Soundify/soundify/src/components/Player.jsx) — Dynamic media player bar & queue popover.
 - **Library Manager**: [soundify/src/components/Library.jsx](file:///e:/My Projects/Soundify/soundify/src/components/Library.jsx) — Playlists & Favorites dashboard.
-
-
----
-
-## 📈 Future Enhancements
-
-1. **True JWT Authentication**: Replace simulated authentication with JSON Web Tokens and MongoDB user accounts.
-2. **Library Customization**: Allow users to save their favorite tracks returned from searches directly into custom play collections (interacting with `POST /songs`).
-3. **Audio Player Customization**: Replace the default native audio tag controls with customized React components matching the green Spotify-inspired color palette.
