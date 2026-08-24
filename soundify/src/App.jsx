@@ -1,36 +1,44 @@
 import { useState } from "react";
+import { AudioProvider, useAudio } from "./context/AudioContext";
 import Login from "./components/Login";
 import Sidebar from "./components/Sidebar";
 import Main from "./components/Main";
+import Player from "./components/Player";
+import UploadModal from "./components/UploadModal";
+import ToastNotification from "./components/ToastNotification";
 
-function App() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+function AppContent() {
+  const { user } = useAudio();
+  const [isGuest, setIsGuest] = useState(false);
 
-  // 🔴 SHOW LOGIN PAGE
-  if (!isLoggedIn) {
-    return <Login onLogin={() => setIsLoggedIn(true)} />;
+  // Show Login page if neither logged in via JWT nor guest session active
+  if (!user && !isGuest) {
+    return <Login onGuestLogin={() => setIsGuest(true)} />;
   }
 
-  // 🟢 SHOW APP AFTER LOGIN
   return (
     <div
       style={{
         display: "flex",
         backgroundColor: "#121212",
-        minHeight: "100vh"
+        minHeight: "100vh",
+        position: "relative"
       }}
     >
-      <Sidebar onLogout={() => setIsLoggedIn(false)} />
-
-      <div
-        style={{
-          marginLeft: "250px",
-          width: "calc(100% - 250px)"
-        }}
-      >
-        <Main />
-      </div>
+      <ToastNotification />
+      <Sidebar />
+      <Main />
+      <Player />
+      <UploadModal />
     </div>
+  );
+}
+
+function App() {
+  return (
+    <AudioProvider>
+      <AppContent />
+    </AudioProvider>
   );
 }
 
