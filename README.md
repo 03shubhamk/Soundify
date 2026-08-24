@@ -155,14 +155,15 @@ Ensure you have the following installed:
 
 The codebase architecture relies on these core components:
 
-- **Server Entry**: [backend/index.js](file:///e:/My Projects/Soundify/backend/index.js) — Express configurations and database connections.
-- **Search Provider**: [backend/routes/search.js](file:///e:/My Projects/Soundify/backend/routes/search.js) — Interface layer calling RapidAPI.
-- **Database Schema**: [backend/models/Song.js](file:///e:/My Projects/Soundify/backend/models/Song.js) — Document blueprint for Mongo collections.
-- **Client App Core**: [soundify/src/App.jsx](file:///e:/My Projects/Soundify/soundify/src/App.jsx) — Logic orchestrator routing guests vs authenticated views.
-- **Core Search Layout**: [soundify/src/components/Main.jsx](file:///e:/My Projects/Soundify/soundify/src/components/Main.jsx) — Performs search requests to local backend API.
-- **Authentication**: [soundify/src/components/Login.jsx](file:///e:/My Projects/Soundify/soundify/src/components/Login.jsx) — Responsive credential fields with simulated auth.
-- **Audio Interface**: [soundify/src/components/Player.jsx](file:///e:/My Projects/Soundify/soundify/src/components/Player.jsx) — Dynamic media player using audio previews.
-- **Track Card UI**: [soundify/src/components/SongCard.jsx](file:///e:/My Projects/Soundify/soundify/src/components/SongCard.jsx) — Beautiful glassmorphic grid items with hover states.
+- **Server Initialization**: [backend/index.js](file:///e:/My Projects/Soundify/backend/index.js) — Express configurations, database connection & static uploads serving.
+- **Authentication Provider**: [backend/routes/auth.js](file:///e:/My Projects/Soundify/backend/routes/auth.js) — JWT user registration, login & liked tracks handler.
+- **Playlist Controller**: [backend/routes/playlists.js](file:///e:/My Projects/Soundify/backend/routes/playlists.js) — User playlist management endpoints.
+- **Search Engine**: [backend/routes/search.js](file:///e:/My Projects/Soundify/backend/routes/search.js) — Deezer API proxy & trending top hits provider.
+- **File Upload Handler**: [backend/routes/songs.js](file:///e:/My Projects/Soundify/backend/routes/songs.js) — Multer MP3 file upload engine.
+- **Global Context**: [soundify/src/context/AudioContext.jsx](file:///e:/My Projects/Soundify/soundify/src/context/AudioContext.jsx) — Core player queue & auth state management.
+- **Audio Interface**: [soundify/src/components/Player.jsx](file:///e:/My Projects/Soundify/soundify/src/components/Player.jsx) — Dynamic media player bar & queue popover.
+- **Library Manager**: [soundify/src/components/Library.jsx](file:///e:/My Projects/Soundify/soundify/src/components/Library.jsx) — Playlists & Favorites dashboard.
+
 
 ---
 
