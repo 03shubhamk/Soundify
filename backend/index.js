@@ -4,7 +4,9 @@ const mongoose = require("mongoose");
 const path = require("path");
 require("dotenv").config();
 
+// Main Soundify Express Backend Server Entrypoint
 const app = express();
+
 
 app.use(cors());
 app.use(express.json());
