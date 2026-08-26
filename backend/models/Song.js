@@ -1,6 +1,8 @@
 const mongoose = require("mongoose");
 
+// Song Mongoose Model Schema
 const songSchema = new mongoose.Schema({
+
   id: { type: String }, // track id (Deezer or custom uuid)
   title: { type: String, required: true },
   artist: { type: String, required: true },
