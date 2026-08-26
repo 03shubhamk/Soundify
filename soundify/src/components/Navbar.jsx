@@ -1,4 +1,5 @@
 import { useAudio } from "../context/AudioContext";
+import { Search, Sun, Moon, Bell, Settings } from "lucide-react";
 
 function Navbar({ searchTerm, setSearchTerm }) {
   const {
@@ -81,18 +82,16 @@ function Navbar({ searchTerm, setSearchTerm }) {
             transition: "all 0.2s"
           }}
         />
-        <span
+        <Search
+          size={16}
           style={{
             position: "absolute",
             left: "14px",
             top: "50%",
             transform: "translateY(-50%)",
-            fontSize: "12px",
             color: "var(--text-muted)"
           }}
-        >
-          🔍
-        </span>
+        />
       </div>
 
       {/* RIGHT: Notifications, Settings, Theme Toggle, Profile */}
@@ -105,18 +104,19 @@ function Navbar({ searchTerm, setSearchTerm }) {
             backgroundColor: "var(--bg-card)",
             border: "1px solid var(--border-color)",
             color: "var(--text-main)",
-            padding: "6px 12px",
+            padding: "6px 14px",
             borderRadius: "20px",
             fontSize: "12px",
             fontWeight: "600",
             cursor: "pointer",
             display: "flex",
             alignItems: "center",
-            gap: "6px",
+            gap: "8px",
             transition: "all 0.2s"
           }}
         >
-          {theme === "dark" ? "☀️ Light" : "🌙 Dark"}
+          {theme === "dark" ? <Sun size={14} color="#ffd700" /> : <Moon size={14} />}
+          <span>{theme === "dark" ? "Light" : "Dark"}</span>
         </button>
 
         {/* Bell Notification */}
@@ -126,11 +126,12 @@ function Navbar({ searchTerm, setSearchTerm }) {
             background: "none",
             border: "none",
             color: "var(--text-muted)",
-            fontSize: "16px",
-            cursor: "pointer"
+            cursor: "pointer",
+            display: "flex",
+            alignItems: "center"
           }}
         >
-          🔔
+          <Bell size={18} />
         </button>
 
         {/* Settings Gear */}
@@ -140,11 +141,12 @@ function Navbar({ searchTerm, setSearchTerm }) {
             background: "none",
             border: "none",
             color: "var(--text-muted)",
-            fontSize: "16px",
-            cursor: "pointer"
+            cursor: "pointer",
+            display: "flex",
+            alignItems: "center"
           }}
         >
-          ⚙️
+          <Settings size={18} />
         </button>
 
         {/* User Profile Avatar */}
