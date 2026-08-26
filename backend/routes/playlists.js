@@ -2,7 +2,9 @@ const express = require("express");
 const Playlist = require("../models/Playlist");
 const { authMiddleware } = require("./auth");
 
+// User Playlists CRUD API Router
 const router = express.Router();
+
 
 // GET USER PLAYLISTS
 router.get("/", authMiddleware, async (req, res) => {
