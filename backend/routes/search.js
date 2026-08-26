@@ -2,8 +2,9 @@ const express = require("express");
 
 const router = express.Router();
 
-// Official Curated Dataset of Famous Hindi & Bollywood Chartbusters with Official 600x600 iTunes Poster Artwork
+// Official Curated Dataset of Famous Hindi & Bollywood Chartbusters with 600x600 Artwork and M4A Audio Previews
 const MOCK_TRENDING = [
+
   {
     id: "hn-1",
     title: "Kesariya",
