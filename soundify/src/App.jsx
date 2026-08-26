@@ -39,7 +39,9 @@ function AppContent() {
   );
 }
 
+// Main App Root Container with Theme Synchronization
 function App() {
+
   return (
     <AudioProvider>
       <AppContent />
