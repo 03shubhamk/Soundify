@@ -72,7 +72,29 @@ router.post("/login", async (req, res) => {
       return res.status(400).json({ error: "Email and password are required" });
     }
 
-    const user = await User.findOne({ email });
+    // ⚡ Instant Demo Credentials Check (no DB query needed)
+    if ((email === "demo@soundify.com" || email === "admin@soundify.com") && password === "password123") {
+      const demoToken = jwtLib.sign({ userId: "demo-user-id" }, JWT_SECRET, { expiresIn: "7d" });
+      return res.json({
+        token: demoToken,
+        user: {
+          id: "demo-user-id",
+          username: "Demo User",
+          email: "demo@soundify.com",
+          avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80",
+          likedSongs: []
+        }
+      });
+    }
+
+    // DB Query with safety catch
+    let user = null;
+    try {
+      user = await User.findOne({ email }).maxTimeMS(3000);
+    } catch (dbErr) {
+      console.warn("DB query skipped/timed out:", dbErr.message);
+    }
+
     if (!user) {
       return res.status(400).json({ error: "Invalid credentials" });
     }
@@ -99,6 +121,8 @@ router.post("/login", async (req, res) => {
     res.status(500).json({ error: "Login failed" });
   }
 });
+
+
 
 // 3. GET ME
 router.get("/me", authMiddleware, async (req, res) => {
