@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useAudio } from "../context/AudioContext";
+import { Play, Pause, Heart, MoreVertical, Music } from "lucide-react";
 
 function SongCard({ song, queue = [] }) {
   const { playSong, currentSong, isPlaying, likedSongs, toggleLikeSong, playlists, addSongToPlaylist } = useAudio();
@@ -13,26 +14,19 @@ function SongCard({ song, queue = [] }) {
   return (
     <div
       style={{
-        backgroundColor: isCurrent ? "#242424" : "#181818",
-        padding: "16px",
-        borderRadius: "10px",
+        backgroundColor: isCurrent ? "var(--bg-active-pill)" : "var(--bg-card)",
+        padding: "14px",
+        borderRadius: "12px",
         cursor: "pointer",
-        transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+        transition: "all 0.2s cubic-bezier(0.4, 0, 0.2, 1)",
         position: "relative",
         display: "flex",
         flexDirection: "column",
         gap: "10px",
-        boxShadow: "0 4px 12px rgba(0,0,0,0.3)"
+        boxShadow: "0 4px 12px rgba(0,0,0,0.08)",
+        border: "1px solid var(--border-color)"
       }}
       className="song-card"
-      onMouseEnter={(e) => {
-        if (!isCurrent) e.currentTarget.style.background = "#282828";
-        e.currentTarget.style.transform = "translateY(-4px)";
-      }}
-      onMouseLeave={(e) => {
-        if (!isCurrent) e.currentTarget.style.background = "#181818";
-        e.currentTarget.style.transform = "translateY(0)";
-      }}
     >
       {/* COVER IMAGE CONTAINER */}
       <div
@@ -62,20 +56,19 @@ function SongCard({ song, queue = [] }) {
             position: "absolute",
             bottom: "8px",
             right: "8px",
-            width: "44px",
-            height: "44px",
+            width: "40px",
+            height: "40px",
             borderRadius: "50%",
-            backgroundColor: "#1DB954",
+            backgroundColor: "var(--accent-cyan)",
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
-            color: "black",
-            fontSize: "18px",
-            boxShadow: "0 8px 16px rgba(0,0,0,0.4)",
+            color: "#000",
+            boxShadow: "0 6px 16px rgba(0,0,0,0.3)",
             transition: "all 0.2s"
           }}
         >
-          {isCurrent && isPlaying ? "⏸" : "▶"}
+          {isCurrent && isPlaying ? <Pause size={18} fill="#000" /> : <Play size={18} fill="#000" style={{ marginLeft: "2px" }} />}
         </div>
       </div>
 
@@ -84,21 +77,21 @@ function SongCard({ song, queue = [] }) {
         <div style={{ overflow: "hidden", flex: 1 }} onClick={() => playSong(song, queue)}>
           <h3
             style={{
-              fontSize: "14px",
+              fontSize: "13px",
               fontWeight: "700",
-              margin: "0 0 4px 0",
+              margin: "0 0 3px 0",
               whiteSpace: "nowrap",
               overflow: "hidden",
               textOverflow: "ellipsis",
-              color: isCurrent ? "#1DB954" : "white"
+              color: isCurrent ? "var(--accent-cyan)" : "var(--text-main)"
             }}
           >
             {song.title}
           </h3>
           <p
             style={{
-              fontSize: "12px",
-              color: "#b3b3b3",
+              fontSize: "11px",
+              color: "var(--text-muted)",
               margin: 0,
               whiteSpace: "nowrap",
               overflow: "hidden",
@@ -110,7 +103,7 @@ function SongCard({ song, queue = [] }) {
         </div>
 
         {/* LIKE & OPTIONS BUTTONS */}
-        <div style={{ display: "flex", gap: "4px" }}>
+        <div style={{ display: "flex", gap: "2px" }}>
           <button
             onClick={(e) => {
               e.stopPropagation();
@@ -120,12 +113,11 @@ function SongCard({ song, queue = [] }) {
               background: "none",
               border: "none",
               cursor: "pointer",
-              fontSize: "14px",
-              padding: "4px",
-              color: isLiked ? "#1DB954" : "#777"
+              padding: "2px",
+              color: isLiked ? "var(--accent-cyan)" : "var(--text-muted)"
             }}
           >
-            {isLiked ? "❤️" : "🤍"}
+            <Heart size={15} fill={isLiked ? "var(--accent-cyan)" : "none"} />
           </button>
 
           <button
@@ -137,12 +129,11 @@ function SongCard({ song, queue = [] }) {
               background: "none",
               border: "none",
               cursor: "pointer",
-              fontSize: "14px",
-              color: "#777",
-              padding: "4px"
+              color: "var(--text-muted)",
+              padding: "2px"
             }}
           >
-            ⋮
+            <MoreVertical size={15} />
           </button>
         </div>
       </div>
@@ -154,19 +145,19 @@ function SongCard({ song, queue = [] }) {
             position: "absolute",
             bottom: "40px",
             right: "12px",
-            backgroundColor: "#242424",
-            border: "1px solid #333",
+            backgroundColor: "var(--bg-card)",
+            border: "1px solid var(--border-color)",
             borderRadius: "8px",
             padding: "8px",
-            boxShadow: "0 8px 24px rgba(0,0,0,0.6)",
+            boxShadow: "0 8px 24px rgba(0,0,0,0.3)",
             zIndex: 100,
             width: "180px"
           }}
           onClick={(e) => e.stopPropagation()}
         >
-          <div style={{ fontSize: "11px", color: "#b3b3b3", marginBottom: "6px" }}>Add to playlist:</div>
+          <div style={{ fontSize: "11px", color: "var(--text-muted)", marginBottom: "6px" }}>Add to playlist:</div>
           {playlists.length === 0 ? (
-            <div style={{ fontSize: "12px", color: "#777" }}>No playlists created</div>
+            <div style={{ fontSize: "12px", color: "var(--text-muted)" }}>No playlists created</div>
           ) : (
             playlists.map((pl) => (
               <div
@@ -176,20 +167,22 @@ function SongCard({ song, queue = [] }) {
                   setShowMenu(false);
                 }}
                 style={{
-                  fontSize: "13px",
-                  color: "white",
+                  fontSize: "12px",
+                  color: "var(--text-main)",
                   padding: "6px 8px",
                   borderRadius: "4px",
                   cursor: "pointer",
                   whiteSpace: "nowrap",
                   overflow: "hidden",
                   textOverflow: "ellipsis",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "6px",
                   transition: "background 0.2s"
                 }}
-                onMouseEnter={(e) => (e.currentTarget.style.background = "#333")}
-                onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}
+                className="playlist-item-hover"
               >
-                🎵 {pl.name}
+                <Music size={14} /> {pl.name}
               </div>
             ))
           )}
