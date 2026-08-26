@@ -21,7 +21,10 @@ graph TD
 
 ## ✨ Key Features
 
+- **Famous Hindi & Bollywood Chartbusters**: Featured top Hindi hits (Kesariya, Apna Bana Le, Chaleya, Tum Hi Ho, Raataan Lambiyan, Satranga) with official 600x600 iTunes poster covers.
+- **Lucide Vector Icons**: Fully upgraded modern vector SVG icons (`lucide-react`) across Sidebar, Navbar, Player, SongCard, and Home components.
 - **Custom Audio Player**: Sticky media player bar with interactive timeline scrubber, volume controls, queue popover, shuffle, and repeat.
+
 - **Dynamic Music Search**: Instant live debounced search across millions of tracks with fallback dataset for uninterrupted playback.
 - **User Playlists & Favorites**: Create and manage custom playlists and save liked songs to MongoDB.
 - **JWT User Authentication**: Real signup/login with password hashing (`bcryptjs`), JWT token validation, and Guest session bypass.
