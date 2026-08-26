@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { useAudio } from "../context/AudioContext";
 
-function UploadModal() {
+// MP3 File Upload Modal Component
+function UploadModal({ onClose }) {
   const { isUploadOpen, setIsUploadOpen, showToast, token } = useAudio();
 
   const [title, setTitle] = useState("");
