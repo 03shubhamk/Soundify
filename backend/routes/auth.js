@@ -74,8 +74,9 @@ router.post("/login", async (req, res) => {
       return res.status(400).json({ error: "Email and password are required" });
     }
 
-    // ⚡ Instant Demo Credentials Check (no DB query needed)
+    // ⚡ Instant Demo Credentials Check (demo@soundify.com / password123)
     if ((email === "demo@soundify.com" || email === "admin@soundify.com") && password === "password123") {
+
       const demoToken = jwtLib.sign({ userId: "demo-user-id" }, JWT_SECRET, { expiresIn: "7d" });
       return res.json({
         token: demoToken,
