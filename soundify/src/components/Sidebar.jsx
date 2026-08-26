@@ -1,5 +1,17 @@
 import { useState, useEffect } from "react";
 import { useAudio } from "../context/AudioContext";
+import {
+  Headphones,
+  Home,
+  ListMusic,
+  Disc,
+  User,
+  Radio,
+  Plus,
+  Upload,
+  LogOut,
+  Sparkles
+} from "lucide-react";
 
 function Sidebar() {
   const {
@@ -8,7 +20,9 @@ function Sidebar() {
     user,
     logout,
     playSong,
-    likedSongs
+    likedSongs,
+    createPlaylist,
+    setIsUploadOpen
   } = useAudio();
 
   const [topCharts, setTopCharts] = useState([]);
@@ -22,11 +36,11 @@ function Sidebar() {
   }, []);
 
   const browseItems = [
-    { id: "home", label: "Home", icon: "🏠" },
-    { id: "library", label: "Playlist", icon: "📑" },
-    { id: "search", label: "Album", icon: "💿" },
-    { id: "liked", label: `Artist (${likedSongs.length})`, icon: "👤" },
-    { id: "radio", label: "Radio", icon: "📻" }
+    { id: "home", label: "Home", icon: Home },
+    { id: "library", label: "Playlist", icon: ListMusic },
+    { id: "search", label: "Album", icon: Disc },
+    { id: "liked", label: `Artist (${likedSongs.length})`, icon: User },
+    { id: "radio", label: "Radio", icon: Radio }
   ];
 
   return (
@@ -61,17 +75,32 @@ function Sidebar() {
           userSelect: "none"
         }}
       >
+        <div
+          style={{
+            width: "36px",
+            height: "36px",
+            borderRadius: "50%",
+            backgroundColor: "var(--accent-cyan)",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            color: "#000",
+            boxShadow: "0 4px 14px rgba(0, 210, 255, 0.4)"
+          }}
+        >
+          <Headphones size={20} />
+        </div>
         <h2
           style={{
             margin: 0,
-            fontSize: "26px",
+            fontSize: "24px",
             fontWeight: "800",
             fontFamily: "'Avenir', 'Outfit', sans-serif",
-            color: "var(--accent-cyan)",
+            color: "var(--text-main)",
             letterSpacing: "-0.5px"
           }}
         >
-          Muzik<span style={{ color: "var(--text-main)" }}>Link</span>
+          Sound<span style={{ color: "var(--accent-cyan)" }}>ify</span>
         </h2>
       </div>
 
@@ -79,12 +108,12 @@ function Sidebar() {
       <div>
         <div
           style={{
-            fontSize: "12px",
+            fontSize: "11px",
             fontWeight: "700",
             color: "var(--text-muted)",
             marginBottom: "10px",
             textTransform: "uppercase",
-            letterSpacing: "0.5px"
+            letterSpacing: "0.8px"
           }}
         >
           Browse
@@ -93,6 +122,7 @@ function Sidebar() {
         <nav style={{ display: "flex", flexDirection: "column", gap: "4px" }}>
           {browseItems.map((item) => {
             const isActive = activeTab === item.id;
+            const IconComponent = item.icon;
             return (
               <div
                 key={item.id}
@@ -109,12 +139,12 @@ function Sidebar() {
                   cursor: "pointer",
                   fontWeight: isActive ? "700" : "500",
                   fontSize: "14px",
-                  color: isActive ? "var(--text-main)" : "var(--text-muted)",
+                  color: isActive ? "var(--accent-cyan)" : "var(--text-muted)",
                   backgroundColor: isActive ? "var(--bg-active-pill)" : "transparent",
                   transition: "all 0.2s"
                 }}
               >
-                <span style={{ fontSize: "16px" }}>{item.icon}</span>
+                <IconComponent size={18} />
                 <span>{item.label}</span>
               </div>
             );
@@ -122,28 +152,80 @@ function Sidebar() {
         </nav>
       </div>
 
+      {/* QUICK CREATION & UPLOAD ACTIONS */}
+      <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
+        <button
+          onClick={() => {
+            const name = prompt("Enter playlist name:");
+            if (name) createPlaylist(name);
+          }}
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: "10px",
+            width: "100%",
+            padding: "9px 12px",
+            borderRadius: "8px",
+            border: "1px dashed var(--border-color)",
+            backgroundColor: "transparent",
+            color: "var(--text-muted)",
+            fontSize: "13px",
+            fontWeight: "600",
+            cursor: "pointer",
+            textAlign: "left",
+            transition: "all 0.2s"
+          }}
+        >
+          <Plus size={16} /> Create Playlist
+        </button>
+
+        <button
+          onClick={() => setIsUploadOpen(true)}
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: "10px",
+            width: "100%",
+            padding: "9px 12px",
+            borderRadius: "8px",
+            border: "1px solid var(--accent-cyan)",
+            backgroundColor: "rgba(0, 210, 255, 0.08)",
+            color: "var(--accent-cyan)",
+            fontSize: "13px",
+            fontWeight: "600",
+            cursor: "pointer",
+            textAlign: "left",
+            transition: "all 0.2s"
+          }}
+        >
+          <Upload size={16} /> Upload MP3
+        </button>
+      </div>
+
       {/* TOP CHARTS SECTION (01 - 07 RANKING LIST) */}
-      <div style={{ marginTop: "10px" }}>
+      <div style={{ marginTop: "6px" }}>
         <div
           style={{
             display: "flex",
             justifyContent: "space-between",
             alignItems: "center",
-            marginBottom: "12px"
+            marginBottom: "10px"
           }}
         >
           <span
             style={{
-              fontSize: "13px",
+              fontSize: "12px",
               fontWeight: "700",
-              color: "var(--text-main)"
+              color: "var(--text-main)",
+              textTransform: "uppercase",
+              letterSpacing: "0.8px"
             }}
           >
             Top Charts
           </span>
         </div>
 
-        <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
+        <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
           {topCharts.map((song, index) => {
             const rankStr = index + 1 < 10 ? `0${index + 1}` : `${index + 1}`;
             return (
@@ -175,7 +257,7 @@ function Sidebar() {
                 <img
                   src={song.cover}
                   alt={song.title}
-                  style={{ width: "38px", height: "38px", borderRadius: "6px", objectFit: "cover" }}
+                  style={{ width: "36px", height: "36px", borderRadius: "6px", objectFit: "cover" }}
                 />
 
                 <div style={{ flex: 1, overflow: "hidden" }}>
@@ -217,7 +299,7 @@ function Sidebar() {
             fontSize: "11px",
             fontWeight: "600",
             cursor: "pointer",
-            marginTop: "12px",
+            marginTop: "10px",
             padding: 0
           }}
         >
@@ -265,11 +347,11 @@ function Sidebar() {
             background: "none",
             border: "none",
             color: "var(--text-muted)",
-            fontSize: "14px",
-            cursor: "pointer"
+            cursor: "pointer",
+            padding: "4px"
           }}
         >
-          🚪
+          <LogOut size={16} />
         </button>
       </div>
     </aside>
