@@ -1,5 +1,18 @@
 import { useState } from "react";
 import { useAudio } from "../context/AudioContext";
+import {
+  Play,
+  Pause,
+  SkipBack,
+  SkipForward,
+  Shuffle,
+  Repeat,
+  Heart,
+  Volume2,
+  VolumeX,
+  List,
+  Activity
+} from "lucide-react";
 
 function Player() {
   const {
@@ -149,36 +162,7 @@ function Player() {
       >
         {/* LEFT: Sound Wave Indicator & Track Info */}
         <div style={{ display: "flex", alignItems: "center", gap: "14px", width: "240px" }}>
-          {/* Animated sound wave bars icon */}
-          <div style={{ display: "flex", alignItems: "flex-end", gap: "2px", height: "16px" }}>
-            <span
-              style={{
-                width: "3px",
-                height: isPlaying ? "14px" : "6px",
-                backgroundColor: "var(--accent-cyan)",
-                borderRadius: "2px",
-                transition: "height 0.3s"
-              }}
-            />
-            <span
-              style={{
-                width: "3px",
-                height: isPlaying ? "10px" : "10px",
-                backgroundColor: "var(--accent-cyan)",
-                borderRadius: "2px",
-                transition: "height 0.3s"
-              }}
-            />
-            <span
-              style={{
-                width: "3px",
-                height: isPlaying ? "16px" : "8px",
-                backgroundColor: "var(--accent-cyan)",
-                borderRadius: "2px",
-                transition: "height 0.3s"
-              }}
-            />
-          </div>
+          <Activity size={18} color="var(--accent-cyan)" />
 
           <img
             src={currentSong.cover}
@@ -230,12 +214,13 @@ function Player() {
             style={{
               background: "none",
               border: "none",
-              fontSize: "16px",
               cursor: "pointer",
-              color: "var(--text-muted)"
+              color: "var(--text-muted)",
+              display: "flex",
+              alignItems: "center"
             }}
           >
-            ⏮
+            <SkipBack size={18} />
           </button>
 
           <button
@@ -248,7 +233,6 @@ function Player() {
               backgroundColor: "var(--accent-cyan)",
               color: "#000",
               border: "none",
-              fontSize: "16px",
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
@@ -257,7 +241,7 @@ function Player() {
               transition: "transform 0.1s"
             }}
           >
-            {isPlaying ? "⏸" : "▶"}
+            {isPlaying ? <Pause size={20} fill="#000" /> : <Play size={20} fill="#000" style={{ marginLeft: "2px" }} />}
           </button>
 
           <button
@@ -266,12 +250,13 @@ function Player() {
             style={{
               background: "none",
               border: "none",
-              fontSize: "16px",
               cursor: "pointer",
-              color: "var(--text-muted)"
+              color: "var(--text-muted)",
+              display: "flex",
+              alignItems: "center"
             }}
           >
-            ⏭
+            <SkipForward size={18} />
           </button>
 
           {/* Timeline Bar */}
@@ -309,17 +294,33 @@ function Player() {
           }}
         >
           <button
+            onClick={() => toggleLikeSong(currentSong)}
+            title={isLiked ? "Unlike" : "Like"}
+            style={{
+              background: "none",
+              border: "none",
+              cursor: "pointer",
+              color: isLiked ? "var(--accent-cyan)" : "var(--text-muted)",
+              display: "flex",
+              alignItems: "center"
+            }}
+          >
+            <Heart size={18} fill={isLiked ? "var(--accent-cyan)" : "none"} />
+          </button>
+
+          <button
             onClick={() => setIsShuffle(!isShuffle)}
             title="Shuffle"
             style={{
               background: "none",
               border: "none",
-              fontSize: "14px",
               cursor: "pointer",
-              color: isShuffle ? "var(--accent-cyan)" : "var(--text-muted)"
+              color: isShuffle ? "var(--accent-cyan)" : "var(--text-muted)",
+              display: "flex",
+              alignItems: "center"
             }}
           >
-            🔀
+            <Shuffle size={18} />
           </button>
 
           <button
@@ -329,11 +330,12 @@ function Player() {
               background: "none",
               border: "none",
               color: "var(--text-muted)",
-              fontSize: "16px",
-              cursor: "pointer"
+              cursor: "pointer",
+              display: "flex",
+              alignItems: "center"
             }}
           >
-            {isMuted || volume === 0 ? "🔇" : "🔊"}
+            {isMuted || volume === 0 ? <VolumeX size={18} /> : <Volume2 size={18} />}
           </button>
 
           <input
@@ -358,11 +360,12 @@ function Player() {
               background: "none",
               border: "none",
               color: showQueue ? "var(--accent-cyan)" : "var(--text-muted)",
-              fontSize: "16px",
-              cursor: "pointer"
+              cursor: "pointer",
+              display: "flex",
+              alignItems: "center"
             }}
           >
-            📜
+            <List size={18} />
           </button>
         </div>
       </footer>
