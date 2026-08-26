@@ -2,7 +2,9 @@ import { createContext, useContext, useState, useEffect, useRef } from "react";
 
 const AudioContext = createContext(null);
 
+// Global AudioContext: Orchestrates playback timeline, queue, liked songs, playlists and themes
 export const AudioProvider = ({ children }) => {
+
   // Audio Ref
   const audioRef = useRef(new Audio());
 
