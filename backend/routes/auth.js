@@ -4,7 +4,9 @@ const jwtLib = require("jsonwebtoken");
 const User = require("../models/User");
 
 
+// Authentication Router: handles user registration, password hashing (bcryptjs), and JWT issuance
 const router = express.Router();
+
 const JWT_SECRET = process.env.JWT_SECRET || "soundify_secret_key_12345";
 
 // Middleware to authenticate token
