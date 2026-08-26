@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useAudio } from "../context/AudioContext";
 import SongCard from "./SongCard";
+import { Play, Pause, Heart, ChevronLeft, ChevronRight } from "lucide-react";
 
 function Home() {
   const { playSong, currentSong, isPlaying, likedSongs, toggleLikeSong } = useAudio();
@@ -13,26 +14,45 @@ function Home() {
       .then((data) => {
         setTrendingSongs(data);
 
-        // Group into mock albums
+        // Official Hindi & Bollywood Albums
         setAlbums([
-          { title: "The Light", artist: "Jose", cover: "https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=300&auto=format&fit=crop&q=80" },
-          { title: "Order Me", artist: "Mason Nail", cover: "https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=300&auto=format&fit=crop&q=80" },
-          { title: "Made For Me", artist: "Tyal Wass", cover: "https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?w=300&auto=format&fit=crop&q=80" },
-          { title: "Mood", artist: "What?", cover: "https://images.unsplash.com/photo-1508700115892-45ecd05ae2ad?w=300&auto=format&fit=crop&q=80" }
+          {
+            title: "Brahmastra",
+            artist: "Pritam & Arijit Singh",
+            cover: "https://is1-ssl.mzstatic.com/image/thumb/Music112/v4/9f/13/ca/9f13ca3b-e533-03e0-f19a-f0aaa774581d/196589311191.jpg/600x600bb.jpg"
+          },
+          {
+            title: "Jawan",
+            artist: "Anirudh & Shilpa Rao",
+            cover: "https://is1-ssl.mzstatic.com/image/thumb/Music126/v4/bb/f4/f5/bbf4f511-3c12-c25e-a475-b6d06faa8c13/8902894362047_cover.jpg/600x600bb.jpg"
+          },
+          {
+            title: "Shershaah",
+            artist: "Jubin & Tanishk",
+            cover: "https://is1-ssl.mzstatic.com/image/thumb/Music125/v4/61/65/ae/6165aee9-8bb9-0bd4-02b0-5d0f1e6257a3/886449510238.jpg/600x600bb.jpg"
+          },
+          {
+            title: "Animal",
+            artist: "Arijit & Shreyas",
+            cover: "https://is1-ssl.mzstatic.com/image/thumb/Music126/v4/db/ad/5e/dbad5e8b-0bee-d962-92d4-021c90e375ac/8902894362092_cover.jpg/600x600bb.jpg"
+          }
         ]);
       })
       .catch((err) => console.error("Home trending error:", err));
   }, []);
 
   const heroSong = trendingSongs[0] || {
-    title: "In My Minds",
-    artist: "Jay Karl",
-    cover: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=500&auto=format&fit=crop&q=80",
-    preview: "https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf07a.mp3?filename=lofi-study-112191.mp3"
+    id: "hn-1",
+    title: "Kesariya",
+    artist: "Arijit Singh & Pritam",
+    album: "Brahmastra",
+    cover: "https://is1-ssl.mzstatic.com/image/thumb/Music112/v4/9f/13/ca/9f13ca3b-e533-03e0-f19a-f0aaa774581d/196589311191.jpg/600x600bb.jpg",
+    preview: "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/38/4c/5c/384c5c8f-3ff8-e457-b2f7-3158ce108649/mzaf_12389299033886433185.plus.aac.p.m4a"
   };
 
   const topMusicList = trendingSongs.slice(0, 5);
   const popularList = trendingSongs.slice(1, 5);
+  const isHeroLiked = likedSongs.some((s) => String(s.id || s._id) === String(heroSong.id || heroSong._id));
 
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: "28px" }}>
@@ -67,17 +87,18 @@ function Home() {
           }}
         />
 
-        <div style={{ maxWidth: "420px", zIndex: 2 }}>
+        <div style={{ maxWidth: "440px", zIndex: 2 }}>
           <span
             style={{
               fontSize: "13px",
               fontWeight: "700",
               color: "var(--text-hero-sub)",
               display: "block",
-              marginBottom: "8px"
+              marginBottom: "8px",
+              letterSpacing: "0.5px"
             }}
           >
-            Trending Now Hit
+            Trending Hindi Chartbuster 🔥
           </span>
 
           <h1
@@ -86,7 +107,7 @@ function Home() {
               fontWeight: "900",
               margin: "0 0 4px 0",
               lineHeight: 1.1,
-              tracking: "-1px"
+              letterSpacing: "-1px"
             }}
           >
             {heroSong.title}
@@ -104,7 +125,7 @@ function Home() {
             }}
           >
             <span>{heroSong.artist}</span>
-            <span style={{ fontSize: "12px", opacity: 0.8 }}>67millions Plays</span>
+            <span style={{ fontSize: "12px", opacity: 0.8 }}>150 Million+ Streams</span>
           </div>
 
           <div style={{ display: "flex", alignItems: "center", gap: "14px" }}>
@@ -119,10 +140,13 @@ function Home() {
                 fontWeight: "700",
                 fontSize: "14px",
                 cursor: "pointer",
-                boxShadow: "0 6px 16px rgba(0,0,0,0.2)"
+                boxShadow: "0 6px 16px rgba(0,0,0,0.2)",
+                display: "flex",
+                alignItems: "center",
+                gap: "8px"
               }}
             >
-              Listen Now
+              <Play size={16} fill="var(--btn-hero-text)" /> Listen Now
             </button>
 
             <button
@@ -134,7 +158,6 @@ function Home() {
                 backgroundColor: "rgba(255,255,255,0.2)",
                 border: "none",
                 color: "white",
-                fontSize: "18px",
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
@@ -142,29 +165,32 @@ function Home() {
                 backdropFilter: "blur(4px)"
               }}
             >
-              ❤️
+              <Heart size={18} fill={isHeroLiked ? "#fff" : "none"} />
             </button>
           </div>
         </div>
 
-        {/* Hero Artist Graphic Photo */}
-        <div style={{ position: "relative", zIndex: 2, height: "220px", display: "flex", alignItems: "flex-end" }}>
+        {/* Hero Poster Graphic Photo */}
+        <div style={{ position: "relative", zIndex: 2, height: "220px", display: "flex", alignItems: "center" }}>
           <img
-            src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=500&auto=format&fit=crop&q=80"
-            alt="Hero Artist"
+            src={heroSong.cover}
+            alt={heroSong.title}
             style={{
-              height: "240px",
+              height: "190px",
+              width: "190px",
+              borderRadius: "16px",
               objectFit: "cover",
-              filter: "drop-shadow(0 10px 20px rgba(0,0,0,0.3))"
+              boxShadow: "0 12px 30px rgba(0,0,0,0.4)",
+              border: "2px solid rgba(255,255,255,0.2)"
             }}
           />
         </div>
       </div>
 
-      {/* 2. "TOP MUSIC" SECTION */}
+      {/* 2. "TOP HINDI MUSIC" SECTION */}
       <div>
         <h2 style={{ fontSize: "18px", fontWeight: "800", marginBottom: "14px", color: "var(--text-main)" }}>
-          Top Music
+          Famous Hindi Hits
         </h2>
 
         <div
@@ -189,10 +215,10 @@ function Home() {
           alignItems: "start"
         }}
       >
-        {/* LEFT COLUMN: POPULAR TRACKS */}
+        {/* LEFT COLUMN: POPULAR HINDI SONGS */}
         <div>
           <h2 style={{ fontSize: "18px", fontWeight: "800", marginBottom: "14px", color: "var(--text-main)" }}>
-            Popular
+            Popular Hindi Songs
           </h2>
 
           <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
@@ -233,11 +259,10 @@ function Home() {
                       display: "flex",
                       alignItems: "center",
                       justifyContent: "center",
-                      fontSize: "12px",
                       cursor: "pointer"
                     }}
                   >
-                    {isCurrent && isPlaying ? "⏸" : "▶"}
+                    {isCurrent && isPlaying ? <Pause size={14} fill="#000" /> : <Play size={14} fill="#000" style={{ marginLeft: "2px" }} />}
                   </button>
 
                   <img
@@ -286,10 +311,11 @@ function Home() {
                       border: "none",
                       color: isLiked ? "var(--accent-cyan)" : "var(--text-muted)",
                       cursor: "pointer",
-                      fontSize: "14px"
+                      display: "flex",
+                      alignItems: "center"
                     }}
                   >
-                    {isLiked ? "❤️" : "🤍"}
+                    <Heart size={16} fill={isLiked ? "var(--accent-cyan)" : "none"} />
                   </button>
                 </div>
               );
@@ -297,7 +323,7 @@ function Home() {
           </div>
         </div>
 
-        {/* RIGHT COLUMN: RECOMMENDED ALBUM */}
+        {/* RIGHT COLUMN: RECOMMENDED BOLLYWOOD ALBUMS */}
         <div>
           <div
             style={{
@@ -308,7 +334,7 @@ function Home() {
             }}
           >
             <h2 style={{ fontSize: "18px", fontWeight: "800", margin: 0, color: "var(--text-main)" }}>
-              Recommended Album
+              Recommended Albums
             </h2>
 
             <div style={{ display: "flex", gap: "6px" }}>
@@ -317,22 +343,20 @@ function Home() {
                   background: "none",
                   border: "none",
                   color: "var(--text-muted)",
-                  fontSize: "16px",
                   cursor: "pointer"
                 }}
               >
-                ←
+                <ChevronLeft size={18} />
               </button>
               <button
                 style={{
                   background: "none",
                   border: "none",
                   color: "var(--text-muted)",
-                  fontSize: "16px",
                   cursor: "pointer"
                 }}
               >
-                →
+                <ChevronRight size={18} />
               </button>
             </div>
           </div>
