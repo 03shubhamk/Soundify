@@ -7,6 +7,7 @@ import { useAudio } from "../context/AudioContext";
 
 function Main() {
   const { activeTab, likedSongs } = useAudio();
+  // Main View Container orchestrating Tab Navigation
   const [searchTerm, setSearchTerm] = useState("");
   const [searchResults, setSearchResults] = useState([]);
   const [isSearching, setIsSearching] = useState(false);
