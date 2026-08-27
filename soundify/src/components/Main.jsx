@@ -4,6 +4,7 @@ import Home from "./Home";
 import Library from "./Library";
 import SongCard from "./SongCard";
 import { useAudio } from "../context/AudioContext";
+import { API_BASE_URL } from "../config";
 
 function Main() {
   const { activeTab, likedSongs } = useAudio();
@@ -22,7 +23,7 @@ function Main() {
 
     setIsSearching(true);
     const handler = setTimeout(() => {
-      fetch(`http://localhost:5000/search/${encodeURIComponent(searchTerm)}`)
+      fetch(`${API_BASE_URL}/search/${encodeURIComponent(searchTerm)}`)
         .then((res) => res.json())
         .then((data) => {
           setSearchResults(data);
