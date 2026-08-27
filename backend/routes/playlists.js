@@ -41,6 +41,7 @@ router.post("/", authMiddleware, async (req, res) => {
 router.post("/:id/songs", authMiddleware, async (req, res) => {
   try {
     const { song } = req.body;
+    if (!song) return res.status(400).json({ error: "Song payload is required" });
     const playlist = await Playlist.findOne({ _id: req.params.id, user: req.user._id });
     if (!playlist) return res.status(404).json({ error: "Playlist not found" });
 
