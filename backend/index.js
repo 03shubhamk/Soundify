@@ -8,7 +8,17 @@ require("dotenv").config();
 const app = express();
 
 
-app.use(cors());
+// Configure CORS & Trust Proxy for production hostings (Render/Railway/Vercel)
+app.set("trust proxy", 1);
+
+const allowedOrigins = process.env.CLIENT_ORIGIN
+  ? process.env.CLIENT_ORIGIN.split(",").map(url => url.trim())
+  : "*";
+
+app.use(cors({
+  origin: allowedOrigins,
+  credentials: true
+}));
 app.use(express.json());
 
 // Serve static uploaded audio & image files
