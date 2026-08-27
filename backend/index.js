@@ -35,9 +35,15 @@ app.use("/playlists", playlistRoutes);
 app.use("/songs", songRoutes);
 app.use("/search", searchRoutes);
 
-// Health check
+// Health check endpoint
 app.get("/", (req, res) => {
-  res.send("Soundify Backend Running - v2.0");
+  res.json({
+    status: "online",
+    service: "Soundify API Backend",
+    version: "2.0.0",
+    timestamp: new Date().toISOString(),
+    uptime: process.uptime()
+  });
 });
 
 // MongoDB Connection
