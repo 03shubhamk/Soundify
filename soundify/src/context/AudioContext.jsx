@@ -48,10 +48,13 @@ export const AudioProvider = ({ children }) => {
 
   // Toggle Theme between dark and light
   const toggleTheme = () => {
-    const newTheme = theme === "dark" ? "light" : "dark";
-    setTheme(newTheme);
-    localStorage.setItem("soundify_theme", newTheme);
+    setTheme(prev => (prev === "dark" ? "light" : "dark"));
   };
+
+  useEffect(() => {
+    document.documentElement.setAttribute("data-theme", theme);
+    localStorage.setItem("soundify_theme", theme);
+  }, [theme]);
 
   // Display Toast Alert
   const showToast = (msg) => {
