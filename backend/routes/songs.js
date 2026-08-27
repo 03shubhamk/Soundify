@@ -55,12 +55,13 @@ router.post(
         return res.status(400).json({ error: "Audio file (.mp3) is required" });
       }
 
+      const baseUrl = process.env.BASE_URL || `${req.protocol}://${req.get("host")}`;
       const audioFile = req.files.audio[0];
-      const audioUrl = `http://localhost:5000/uploads/${audioFile.filename}`;
+      const audioUrl = `${baseUrl}/uploads/${audioFile.filename}`;
 
       let coverUrl = "https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=300&auto=format&fit=crop&q=80";
       if (req.files.cover && req.files.cover[0]) {
-        coverUrl = `http://localhost:5000/uploads/${req.files.cover[0].filename}`;
+        coverUrl = `${baseUrl}/uploads/${req.files.cover[0].filename}`;
       }
 
       const newSong = new Song({
