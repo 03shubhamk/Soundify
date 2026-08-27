@@ -1,6 +1,14 @@
 # 🎧 Soundify
 
+![Vercel](https://img.shields.io/badge/Frontend-Vercel-black?logo=vercel)
+![Render](https://img.shields.io/badge/Backend-Render-informational?logo=render)
+![React](https://img.shields.io/badge/React-18-blue?logo=react)
+![Node](https://img.shields.io/badge/Node.js-Express-green?logo=node.js)
+![MongoDB](https://img.shields.io/badge/MongoDB-Atlas-brightgreen?logo=mongodb)
+
 Soundify is a modern, high-performance, dark-themed music streaming and search application modeled after modern web streaming players. Built using a decoupled client-server architecture, it features a React + Vite frontend and a Node.js + Express backend integrated with MongoDB and the external Deezer API.
+
+> 📖 **Deploy Guide**: Detailed Vercel & Render step-by-step instructions available in [`DEPLOYMENT.md`](file:///e:/My%20Projects/Soundify/DEPLOYMENT.md).
 
 ---
 
