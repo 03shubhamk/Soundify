@@ -9,6 +9,10 @@ const router = express.Router();
 
 const JWT_SECRET = process.env.JWT_SECRET || "soundify_secret_key_12345";
 
+if (!process.env.JWT_SECRET && process.env.NODE_ENV === "production") {
+  console.warn("⚠️ WARNING: JWT_SECRET environment variable is missing! Falling back to default string.");
+}
+
 // Middleware to authenticate token
 const authMiddleware = async (req, res, next) => {
   try {
