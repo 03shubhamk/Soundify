@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useAudio } from "../context/AudioContext";
+import { API_BASE_URL } from "../config";
 import {
   Headphones,
   Home,
@@ -29,7 +30,7 @@ function Sidebar() {
 
   // Mock / API Top Charts for sidebar
   useEffect(() => {
-    fetch("http://localhost:5000/search/trending")
+    fetch(`${API_BASE_URL}/search/trending`)
       .then((res) => res.json())
       .then((data) => setTopCharts(data.slice(0, 6)))
       .catch((err) => console.error("Sidebar top charts error:", err));
