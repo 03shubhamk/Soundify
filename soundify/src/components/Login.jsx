@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useAudio } from "../context/AudioContext";
 import { Headphones } from "lucide-react";
+import { API_BASE_URL } from "../config";
 
 function Login({ onGuestLogin }) {
   const { login } = useAudio();
@@ -20,7 +21,7 @@ function Login({ onGuestLogin }) {
     const body = isRegister ? { username, email, password } : { email, password };
 
     try {
-      const res = await fetch(`http://localhost:5000${endpoint}`, {
+      const res = await fetch(`${API_BASE_URL}${endpoint}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(body)
