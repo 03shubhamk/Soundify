@@ -1,4 +1,5 @@
 import { createContext, useContext, useState, useEffect, useRef } from "react";
+import { API_BASE_URL } from "../config";
 
 const AudioContext = createContext(null);
 
@@ -201,7 +202,7 @@ export const AudioProvider = ({ children }) => {
     setLikedSongs(updated);
 
     if (token) {
-      fetch("http://localhost:5000/api/auth/toggle-like", {
+      fetch(`${API_BASE_URL}/api/auth/toggle-like`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -224,7 +225,7 @@ export const AudioProvider = ({ children }) => {
     showToast(`Created playlist "${name}" 🎶`);
 
     if (token) {
-      fetch("http://localhost:5000/playlists", {
+      fetch(`${API_BASE_URL}/playlists`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
