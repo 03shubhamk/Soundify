@@ -211,6 +211,7 @@ function Player() {
           <button
             onClick={prevSong}
             title="Previous Track"
+            aria-label="Previous Track"
             style={{
               background: "none",
               border: "none",
@@ -226,6 +227,7 @@ function Player() {
           <button
             onClick={togglePlay}
             title={isPlaying ? "Pause" : "Play"}
+            aria-label={isPlaying ? "Pause" : "Play"}
             style={{
               width: "42px",
               height: "42px",
@@ -247,6 +249,7 @@ function Player() {
           <button
             onClick={nextSong}
             title="Next Track"
+            aria-label="Next Track"
             style={{
               background: "none",
               border: "none",
