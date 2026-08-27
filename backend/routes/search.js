@@ -101,7 +101,10 @@ router.get("/trending", async (req, res) => {
 // SEARCH MUSIC
 router.get("/:query", async (req, res) => {
   try {
-    const rawQuery = req.params.query;
+    const rawQuery = req.params.query ? req.params.query.trim() : "";
+    if (!rawQuery) {
+      return res.json(MOCK_TRENDING);
+    }
     const query = encodeURIComponent(rawQuery);
 
     // Filter local dataset first if matching query
