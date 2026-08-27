@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useAudio } from "../context/AudioContext";
 import SongCard from "./SongCard";
 import { Play, Pause, Heart, ChevronLeft, ChevronRight } from "lucide-react";
+import { API_BASE_URL } from "../config";
 
 function Home() {
   const { playSong, currentSong, isPlaying, likedSongs, toggleLikeSong } = useAudio();
@@ -9,7 +10,7 @@ function Home() {
   const [albums, setAlbums] = useState([]);
 
   useEffect(() => {
-    fetch("http://localhost:5000/search/trending")
+    fetch(`${API_BASE_URL}/search/trending`)
       .then((res) => res.json())
       .then((data) => {
         setTrendingSongs(data);
