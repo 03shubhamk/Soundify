@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useAudio } from "../context/AudioContext";
+import { API_BASE_URL } from "../config";
 
 // MP3 File Upload Modal Component
 function UploadModal({ onClose }) {
@@ -36,7 +37,7 @@ function UploadModal({ onClose }) {
       const headers = {};
       if (token) headers["Authorization"] = `Bearer ${token}`;
 
-      const res = await fetch("http://localhost:5000/songs/upload", {
+      const res = await fetch(`${API_BASE_URL}/songs/upload`, {
         method: "POST",
         headers,
         body: formData
